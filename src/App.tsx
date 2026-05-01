@@ -64,7 +64,7 @@ export default function App() {
       <header className="hidden md:flex fixed top-0 w-full z-50 bg-brand-black shadow-md px-8 py-4 justify-between items-center border-b border-white/5">
         <div className="flex items-center gap-4 cursor-pointer" onClick={() => setActiveTab('inicio')}>
           <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center p-0.5 shadow-lg shrink-0 overflow-hidden">
-             <img src="/logo.webp" alt="Logo Mambo Restobar" className="w-full h-full object-cover rounded-full" />
+             <img src="/logo.webp" alt="Logo Mambo Club Restobar" className="w-full h-full object-cover rounded-full" />
           </div>
           <div className="flex flex-col">
             <h1 className="text-2xl font-black italic tracking-tighter leading-none mb-1 text-white uppercase">MAMBO CLUB <span className="text-brand-orange">RESTOBAR</span></h1>

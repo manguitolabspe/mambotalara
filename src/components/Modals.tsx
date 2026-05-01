@@ -102,7 +102,7 @@ export function CartModal({ cart, onClose, onRemove, onUpdateQuantity, onUpdateC
   const [editCommentText, setEditCommentText] = useState('');
 
   const handleOrder = () => {
-    let message = `*Hola Mambo Restobar, quiero hacer un pedido:*\n\n`;
+    let message = `*Hola Mambo Club Restobar, quiero hacer un pedido:*\n\n`;
     cart.forEach(c => {
       message += `${c.quantity}x ${c.item.title} (S/ ${c.item.price})\n`;
       if (c.comment) {
@@ -111,7 +111,7 @@ export function CartModal({ cart, onClose, onRemove, onUpdateQuantity, onUpdateC
       message += `\n`;
     });
     message += `*Total: S/ ${total.toFixed(2)}*\n\n`;
-    message += `_Enviado desde el App de Mambo Restobar_`;
+    message += `_Enviado desde el App de Mambo Club Restobar_`;
     
     const whatsappUrl = `https://api.whatsapp.com/send?phone=51910931580&text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');

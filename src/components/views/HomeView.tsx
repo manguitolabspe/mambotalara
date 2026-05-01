@@ -147,7 +147,7 @@ export function HomeView({ setActiveTab, onOpenSchedule, onOpenPaymentQR, onOpen
       {/* MOBILE INFO SECTION */}
       <div className="md:hidden flex flex-col items-center px-6 text-center mb-12 w-full mx-auto mt-16 relative z-10">
         <div className="w-36 h-36 mb-6 p-1 bg-brand-cream-light rounded-full shadow-2xl flex items-center justify-center overflow-hidden border-4 border-brand-orange">
-           <img src="/logo.webp" alt="Logo Mambo Restobar" className="w-full h-full object-cover rounded-full" />
+           <img src="/logo.webp" alt="Logo Mambo Club Restobar" className="w-full h-full object-cover rounded-full" />
         </div>
         
         {isOpen ? (
@@ -295,7 +295,7 @@ export function HomeView({ setActiveTab, onOpenSchedule, onOpenPaymentQR, onOpen
             <button 
                onClick={() => {
                   if (navigator.share) {
-                     navigator.share({ title: "Mambo Restobar", url: window.location.href });
+                     navigator.share({ title: "Mambo Club Restobar", url: window.location.href });
                   } else {
                      handleWhatsapp();
                   }

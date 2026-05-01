@@ -224,7 +224,7 @@ export const MENU_ITEMS = [
     id: 20,
     categoryId: 'entradas',
     subCategory: 'Tradición',
-    tag: 'Piura',
+    tag: 'Norteño',
     isTop: false,
     title: 'Tamalitos Verdes Piuranos',
     price: '15.00',
@@ -307,7 +307,7 @@ export const MENU_ITEMS = [
     isTop: false,
     title: 'Sudado de Cachema (Piurano)',
     price: '45.00',
-    description: 'Cachema entera sudada con chicha de jora, tomate, cebolla y ají panca. Un clásico de Piura.',
+    description: 'Cachema entera sudada con chicha de jora, tomate, cebolla y ají panca. Un clásico del Norte.',
     image: '/sudado-norteño.webp'
   },
   {
@@ -712,7 +712,7 @@ export const HERO_SLIDES = [
   {
     id: 3,
     desktopTitle: 'AUTÉNTICO CEVICHE',
-    desktopText: 'Mantenemos la esencia piurana con los insumos más frescos del día.',
+    desktopText: 'Mantenemos la esencia de Talara con los insumos más frescos del día.',
     mobileTitle: 'Marinos',
     mobileSubtitle: 'Puro Norte',
     image: '/ceviche-pedrito.webp'
