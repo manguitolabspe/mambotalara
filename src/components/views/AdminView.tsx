@@ -18,7 +18,7 @@ export function AdminView({ onLogout }: { onLogout: () => void }) {
   // Local states for management (Demo)
   const [items, setItems] = useState<MenuItem[]>(MENU_ITEMS);
   const [slides, setSlides] = useState(HERO_SLIDES);
-  const [whatsapp, setWhatsapp] = useState('+51 987 654 321');
+  const [whatsapp, setWhatsapp] = useState('+51 924 725 611');
   const [isStoreOpen, setIsStoreOpen] = useState(true);
 
   // Loyalty Config State
@@ -115,7 +115,7 @@ export function AdminView({ onLogout }: { onLogout: () => void }) {
           <div className="bg-white/5 rounded-[2rem] p-5 mb-8">
             <p className="text-[10px] font-black text-white/30 uppercase tracking-widest mb-2">Soporte Mambo</p>
             <div className="flex items-center gap-2 text-xs font-bold text-white/60 italic">
-              <Phone className="w-3 h-3 text-brand-orange" /> +51 987 654 321
+              <Phone className="w-3 h-3 text-brand-orange" /> +51 924 725 611
             </div>
           </div>
           <button 
@@ -457,14 +457,14 @@ export function AdminView({ onLogout }: { onLogout: () => void }) {
                                <Instagram className="w-5 h-5 text-brand-orange" />
                                <label className="text-[10px] font-black text-brand-black/30 uppercase tracking-widest">Canal Instagram</label>
                             </div>
-                            <input className="w-full bg-brand-cream-light border border-brand-black/5 rounded-2xl px-6 py-4 text-xs font-black text-brand-black/40" value="@mamborestobar" readOnly />
+                            <input className="w-full bg-brand-cream-light border border-brand-black/5 rounded-2xl px-6 py-4 text-xs font-black text-brand-black/40" value="@mamboclubrestobar" readOnly />
                          </div>
                          <div className="space-y-3">
                             <div className="flex items-center gap-3 mb-2">
                                <Facebook className="w-5 h-5 text-brand-orange" />
                                <label className="text-[10px] font-black text-brand-black/30 uppercase tracking-widest">Página Facebook</label>
                             </div>
-                            <input className="w-full bg-brand-cream-light border border-brand-black/5 rounded-2xl px-6 py-4 text-xs font-black text-brand-black/40" value="/mamborestobar" readOnly />
+                            <input className="w-full bg-brand-cream-light border border-brand-black/5 rounded-2xl px-6 py-4 text-xs font-black text-brand-black/40" value="/mamboclubrestobar" readOnly />
                          </div>
                       </div>
 

@@ -105,7 +105,7 @@ export function HomeView({ setActiveTab, onOpenSchedule, onOpenPaymentQR, onOpen
         </div>
 
         {/* MOBILE HERO SLIDER */}
-        <div className="md:hidden relative w-full h-[400px] bg-brand-black">
+        <div className="md:hidden relative w-full h-[280px] bg-brand-black">
           <AnimatePresence mode="popLayout">
             <motion.img 
               key={`mobile-img-${slide.id}`}
@@ -217,7 +217,7 @@ export function HomeView({ setActiveTab, onOpenSchedule, onOpenPaymentQR, onOpen
       <div className="pl-4 md:px-0 mb-20 mt-4 md:mt-0 overflow-hidden md:overflow-visible relative z-10 w-full">
         <div className="flex items-center justify-between mb-8 pr-6 md:pr-0">
           <h2 className="text-4xl font-black flex items-center tracking-tighter text-brand-black uppercase italic">
-            <Sparkles className="text-brand-orange w-10 h-10 mr-4 animate-bounce"/> Lo Imperdible
+            <Sparkles className="text-brand-orange w-10 h-10 mr-4 animate-bounce"/> Recomendados del Chef
           </h2>
           <button onClick={() => setActiveTab('carta')} className="hidden md:flex text-sm font-black text-brand-orange hover:text-brand-orange-dark transition-colors items-center uppercase tracking-[0.2em] border-b-2 border-brand-orange/20 pb-1">
             VER CARTA COMPLETA <ChevronRight className="w-4 h-4 ml-2"/>

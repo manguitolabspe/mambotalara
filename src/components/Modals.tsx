@@ -113,7 +113,7 @@ export function CartModal({ cart, onClose, onRemove, onUpdateQuantity, onUpdateC
     message += `*Total: S/ ${total.toFixed(2)}*\n\n`;
     message += `_Enviado desde el App de Mambo Club Restobar_`;
     
-    const whatsappUrl = `https://api.whatsapp.com/send?phone=51910931580&text=${encodeURIComponent(message)}`;
+    const whatsappUrl = `https://api.whatsapp.com/send?phone=51924725611&text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
 
