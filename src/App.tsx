@@ -125,62 +125,48 @@ export default function App() {
 
       {/* --- MAIN CONTENT AREA --- */}
       <main className="flex-1 w-full max-w-[1200px] mx-auto md:px-8">
-        <AnimatePresence mode="wait">
-          {activeTab === 'inicio' && (
-            <motion.div 
-              key="inicio"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="flex flex-col w-full"
-            >
-              <HomeView 
-                setActiveTab={setActiveTab} 
-                onOpenSchedule={() => setIsScheduleOpen(true)}
-                onOpenPaymentQR={() => setIsPaymentQROpen(true)}
-                onOpenCash={() => setIsCashOpen(true)}
-                onOpenBankTransfer={() => setIsBankTransferOpen(true)}
-                addToCart={addToCart}
-              />
-            </motion.div>
-          )}
-          {activeTab === 'carta' && (
-            <motion.div 
-              key="carta"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="flex flex-col w-full"
-            >
-              <MenuView addToCart={addToCart} />
-            </motion.div>
-          )}
-          {activeTab === 'admin' && (
-            <motion.div key="admin" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex flex-col w-full">
-              <AdminView onLogout={() => { setUserRole('guest'); setActiveTab('inicio'); }} />
-            </motion.div>
-          )}
-          {activeTab === 'cliente' && (
-            <motion.div key="cliente" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex flex-col w-full">
-              <ClienteView 
-                initialTab="perfil" 
-                onLogout={() => { setUserRole('guest'); setActiveTab('inicio'); }} 
-                isVipPassPurchased={isVipPassPurchased}
-                setIsVipPassPurchased={setIsVipPassPurchased}
-              />
-            </motion.div>
-          )}
-          {activeTab === 'vip' && (
-            <motion.div key="vip" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex flex-col w-full">
-              <ClienteView 
-                initialTab="vip" 
-                onLogout={() => { setUserRole('guest'); setActiveTab('inicio'); }} 
-                isVipPassPurchased={isVipPassPurchased}
-                setIsVipPassPurchased={setIsVipPassPurchased}
-              />
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {activeTab === 'inicio' && (
+          <div key="inicio" className="flex flex-col w-full">
+            <HomeView 
+              setActiveTab={setActiveTab} 
+              onOpenSchedule={() => setIsScheduleOpen(true)}
+              onOpenPaymentQR={() => setIsPaymentQROpen(true)}
+              onOpenCash={() => setIsCashOpen(true)}
+              onOpenBankTransfer={() => setIsBankTransferOpen(true)}
+              addToCart={addToCart}
+            />
+          </div>
+        )}
+        {activeTab === 'carta' && (
+          <div key="carta" className="flex flex-col w-full">
+            <MenuView addToCart={addToCart} />
+          </div>
+        )}
+        {activeTab === 'admin' && (
+          <div key="admin" className="flex flex-col w-full">
+            <AdminView onLogout={() => { setUserRole('guest'); setActiveTab('inicio'); }} />
+          </div>
+        )}
+        {activeTab === 'cliente' && (
+          <div key="cliente" className="flex flex-col w-full">
+            <ClienteView 
+              initialTab="perfil" 
+              onLogout={() => { setUserRole('guest'); setActiveTab('inicio'); }} 
+              isVipPassPurchased={isVipPassPurchased}
+              setIsVipPassPurchased={setIsVipPassPurchased}
+            />
+          </div>
+        )}
+        {activeTab === 'vip' && (
+          <div key="vip" className="flex flex-col w-full">
+            <ClienteView 
+              initialTab="vip" 
+              onLogout={() => { setUserRole('guest'); setActiveTab('inicio'); }} 
+              isVipPassPurchased={isVipPassPurchased}
+              setIsVipPassPurchased={setIsVipPassPurchased}
+            />
+          </div>
+        )}
       </main>
 
       {/* Floating Cart Button */}

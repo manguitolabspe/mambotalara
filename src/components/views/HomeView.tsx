@@ -41,98 +41,70 @@ export function HomeView({ setActiveTab, onOpenSchedule, onOpenPaymentQR, onOpen
       <div className="w-full rounded-none md:rounded-3xl overflow-visible md:overflow-hidden md:shadow-2xl relative z-20 mb-8 md:mb-12">
         {/* DESKTOP HERO SLIDER */}
         <div className="hidden md:block relative h-[600px] w-full overflow-hidden bg-brand-black">
-           <AnimatePresence mode="popLayout">
-             <motion.img 
-               key={`desktop-img-${slide.id}`}
-               initial={{ opacity: 0, scale: 1.1 }}
-               animate={{ opacity: 1, scale: 1 }}
-               exit={{ opacity: 0 }}
-               transition={{ duration: 1.2 }}
-               src={slide.image} 
-               alt="Hero" 
-               className="w-full h-full object-cover absolute inset-0"
-             />
-           </AnimatePresence>
-           <div className="absolute inset-0 bg-gradient-to-r from-brand-black via-brand-black/60 to-transparent z-10" />
-           <div className="absolute inset-0 flex flex-col justify-center px-16 max-w-3xl z-20">
-              <AnimatePresence mode="popLayout">
-                 <motion.h1 
-                    key={`desktop-title-${slide.id}`}
-                    initial={{ opacity: 0, x: -30 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 30 }}
-                    className="text-8xl font-sans font-black uppercase mb-6 tracking-tighter drop-shadow-lg text-white italic"
-                 >
-                   {slide.desktopTitle.split(' ')[0]} <br/> <span className="text-brand-orange">{slide.desktopTitle.split(' ')[1]}</span>
-                 </motion.h1>
-                 <motion.p 
-                    key={`desktop-desc-${slide.id}`}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    className="text-xl mb-10 leading-relaxed text-white/80 font-medium"
-                 >
-                    <Flame className="inline text-brand-orange w-6 h-6 mr-3 -mt-1 animate-pulse"/>
-                    {slide.desktopText}
-                 </motion.p>
-              </AnimatePresence>
-              <div className="flex gap-4">
-                <button 
-                  onClick={() => setActiveTab('carta')}
-                  className="bg-brand-orange hover:bg-brand-orange-dark text-white px-10 py-5 rounded-full uppercase tracking-widest font-black text-sm transition-all flex items-center shadow-xl shadow-brand-orange/40 active:scale-95"
-                >
-                  EXPLORAR CARTA <ChevronRight className="ml-2 w-5 h-5"/>
-                </button>
-                <button 
-                  onClick={handleWhatsapp}
-                  className="bg-white/10 backdrop-blur-md hover:bg-white/20 text-white border border-white/30 px-10 py-5 rounded-full uppercase tracking-widest font-black text-sm transition-all flex items-center shadow-xl active:scale-95"
-                >
-                  RESERVAR MESA
-                </button>
-              </div>
-           </div>
-           
-           {/* Slider Dots */}
-           <div className="absolute bottom-10 left-16 flex gap-3 z-20">
-             {HERO_SLIDES.map((s, i) => (
-                <button 
-                  key={s.id}
-                  onClick={() => setCurrentSlide(i)}
-                  className={`h-2 rounded-full transition-all duration-300 ${i === currentSlide ? 'w-12 bg-brand-orange' : 'w-4 bg-white/30 hover:bg-white/50'}`} 
-                />
-             ))}
-           </div>
+          <img 
+            key={`desktop-img-${slide.id}`}
+            src={slide.image} 
+            alt="Hero" 
+            className="w-full h-full object-cover absolute inset-0"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-brand-black via-brand-black/60 to-transparent z-10" />
+          <div className="absolute inset-0 flex flex-col justify-center px-16 max-w-3xl z-20">
+            <h1 
+              className="text-8xl font-sans font-black uppercase mb-6 tracking-tighter drop-shadow-lg text-white italic"
+            >
+              {slide.desktopTitle.split(' ')[0]} <br/> <span className="text-brand-orange">{slide.desktopTitle.split(' ')[1]}</span>
+            </h1>
+            <p 
+              className="text-xl mb-10 leading-relaxed text-white/80 font-medium"
+            >
+              <Flame className="inline text-brand-orange w-6 h-6 mr-3 -mt-1 animate-pulse"/>
+              {slide.desktopText}
+            </p>
+            <div className="flex gap-4">
+              <button 
+                onClick={() => setActiveTab('carta')}
+                className="bg-brand-orange hover:bg-brand-orange-dark text-white px-10 py-5 rounded-full uppercase tracking-widest font-black text-sm transition-all flex items-center shadow-xl shadow-brand-orange/40 active:scale-95"
+              >
+                EXPLORAR CARTA <ChevronRight className="ml-2 w-5 h-5"/>
+              </button>
+              <button 
+                onClick={handleWhatsapp}
+                className="bg-white/10 backdrop-blur-md hover:bg-white/20 text-white border border-white/30 px-10 py-5 rounded-full uppercase tracking-widest font-black text-sm transition-all flex items-center shadow-xl active:scale-95"
+              >
+                RESERVAR MESA
+              </button>
+            </div>
+          </div>
+          
+          {/* Slider Dots */}
+          <div className="absolute bottom-10 left-16 flex gap-3 z-20">
+            {HERO_SLIDES.map((s, i) => (
+               <button 
+                 key={s.id}
+                 onClick={() => setCurrentSlide(i)}
+                 className={`h-2 rounded-full transition-all duration-300 ${i === currentSlide ? 'w-12 bg-brand-orange' : 'w-4 bg-white/30 hover:bg-white/50'}`} 
+               />
+            ))}
+          </div>
         </div>
 
         {/* MOBILE HERO SLIDER */}
         <div className="md:hidden relative w-full h-[240px] bg-brand-black">
-          <AnimatePresence mode="popLayout">
-            <motion.img 
-              key={`mobile-img-${slide.id}`}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 1 }}
-              src={slide.image} 
-              alt="Mobile Hero" 
-              className="w-full h-full object-cover absolute inset-0"
-            />
-          </AnimatePresence>
+          <img 
+            key={`mobile-img-${slide.id}`}
+            src={slide.image} 
+            alt="Mobile Hero" 
+            className="w-full h-full object-cover absolute inset-0"
+          />
           <div className="absolute inset-0 bg-brand-black/50 z-10"/>
           
           <div className="absolute inset-0 flex flex-col items-center justify-center pb-6 z-20">
-             <AnimatePresence mode="popLayout">
-               <motion.div
-                 key={`mobile-text-${slide.id}`}
-                 initial={{ opacity: 0, y: 15 }}
-                 animate={{ opacity: 1, y: 0 }}
-                 exit={{ opacity: 0, y: -15 }}
-                 className="text-center px-4"
-               >
-                 <h2 className="text-[48px] font-black text-white drop-shadow-2xl tracking-tighter leading-none uppercase italic">{slide.mobileTitle}</h2>
-                 <p className="text-base font-black mt-3 text-brand-orange drop-shadow-lg uppercase tracking-[0.3em]">{slide.mobileSubtitle}</p>
-               </motion.div>
-             </AnimatePresence>
+            <div
+              className="text-center px-4"
+            >
+              <h2 className="text-[48px] font-black text-white drop-shadow-2xl tracking-tighter leading-none uppercase italic">{slide.mobileTitle}</h2>
+              <p className="text-base font-black mt-3 text-brand-orange drop-shadow-lg uppercase tracking-[0.3em]">{slide.mobileSubtitle}</p>
+            </div>
           </div>
           
           <button 
