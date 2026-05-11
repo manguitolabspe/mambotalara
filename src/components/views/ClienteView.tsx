@@ -1,9 +1,24 @@
-import React, { useState } from 'react';
-import { User, LogOut, Award, Calendar, Ticket, Star, QrCode, CheckCircle2, Gift, Flame, MapPin, Clock, X } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { User, LogOut, Award, Calendar, Ticket, Star, QrCode, CheckCircle2, Gift, Flame, MapPin, Clock, X, Utensils } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 
-export function ClienteView({ onLogout }: { onLogout: () => void }) {
-  const [clientTab, setClientTab] = useState<'vip' | 'eventos' | 'promociones'>('vip');
+export function ClienteView({ 
+  onLogout, 
+  initialTab = 'perfil',
+  isVipPassPurchased,
+  setIsVipPassPurchased
+}: { 
+  onLogout: () => void, 
+  initialTab?: 'perfil' | 'vip' | 'eventos' | 'promociones',
+  isVipPassPurchased: boolean,
+  setIsVipPassPurchased: (v: boolean) => void
+}) {
+  const [clientTab, setClientTab] = useState<'perfil' | 'vip' | 'eventos' | 'promociones'>(initialTab);
+  
+  // Use a second effect or just update if initialTab changes in the parent
+  useEffect(() => {
+    setClientTab(initialTab);
+  }, [initialTab]);
   
   // Demo State for Loyalty
   const [stamps, setStamps] = useState(4);
@@ -11,6 +26,10 @@ export function ClienteView({ onLogout }: { onLogout: () => void }) {
   const [points, setPoints] = useState(1250);
   const [level, setLevel] = useState<'BRONCE' | 'PLATA' | 'ORO'>('BRONCE');
   const [selectedCoupon, setSelectedCoupon] = useState<any>(null);
+  const [showPurchaseSimulation, setShowPurchaseSimulation] = useState(false);
+
+  // Profile Sub-tabs logic
+  const [profileTab, setProfileTab] = useState<'resumen' | 'logros'>('resumen');
 
   const addStamp = () => {
     if (stamps < totalStampsRequired) {
@@ -20,6 +39,14 @@ export function ClienteView({ onLogout }: { onLogout: () => void }) {
       // Level check demo
       if (points + 100 >= 2000) setLevel('PLATA');
     }
+  };
+
+  const handlePurchaseVip = () => {
+    setShowPurchaseSimulation(true);
+    setTimeout(() => {
+      setIsVipPassPurchased(true);
+      setShowPurchaseSimulation(false);
+    }, 2000);
   };
 
   return (
@@ -50,36 +77,133 @@ export function ClienteView({ onLogout }: { onLogout: () => void }) {
             <p className="text-[10px] font-black text-brand-orange tracking-[0.2em] uppercase opacity-70 mb-1">MamboPoints</p>
             <p className="text-3xl font-black text-brand-black italic tracking-tighter">{points.toLocaleString()}</p>
           </div>
-          <button 
-            onClick={onLogout}
-            className="bg-brand-cream-light hover:bg-brand-black/5 text-brand-black/40 hover:text-brand-black p-4 rounded-2xl transition-all border border-brand-black/5 flex items-center gap-3 group"
-          >
-            <LogOut className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-            <span className="text-xs font-black md:hidden uppercase tracking-widest">SALIR</span>
-          </button>
+          {initialTab !== 'perfil' && (
+            <button 
+              onClick={onLogout}
+              className="bg-brand-cream-light hover:bg-brand-black/5 text-brand-black/40 hover:text-brand-black p-4 rounded-2xl transition-all border border-brand-black/5 flex items-center gap-3 group"
+            >
+              <LogOut className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+              <span className="text-xs font-black md:hidden uppercase tracking-widest">SALIR</span>
+            </button>
+          )}
         </div>
       </div>
 
-      {/* Navegación Interna */}
-      <nav className="flex gap-1 md:gap-4 font-black text-xs md:text-sm tracking-widest mb-12 overflow-x-auto whitespace-nowrap px-4 py-2 w-full max-w-4xl justify-start md:justify-center no-scrollbar">
-        {[
-          { id: 'vip', label: 'ZONA VIP', icon: Award },
-          { id: 'eventos', label: 'PRÓXIMOS EVENTOS', icon: Calendar },
-          { id: 'promociones', label: 'CUPONES', icon: Ticket },
-        ].map((tab) => (
+      {/* Navegación Interna - Se oculta si estamos solo en perfil */}
+      {initialTab !== 'perfil' && (
+        <nav className="flex gap-1 md:gap-4 font-black text-xs md:text-sm tracking-widest mb-12 overflow-x-auto whitespace-nowrap px-4 py-2 w-full max-w-4xl justify-start md:justify-center no-scrollbar">
+          {[
+            { id: 'vip', label: 'FIDELIDAD', icon: Award },
+            { id: 'eventos', label: 'EVENTOS', icon: Calendar },
+            { id: 'promociones', label: 'CARTILLA VIP', icon: Ticket },
+          ].map((tab) => (
+            <button 
+              key={tab.id}
+              onClick={() => setClientTab(tab.id as any)} 
+              className={`flex items-center gap-2 px-6 py-3 rounded-2xl transition-all uppercase text-[10px] tracking-[0.2em] ${clientTab === tab.id ? 'bg-brand-black text-white shadow-xl shadow-brand-black/20' : 'text-brand-black/40 hover:text-brand-black hover:bg-brand-black/5'}`}
+            >
+              <tab.icon className="w-4 h-4" /> {tab.label}
+            </button>
+          ))}
+        </nav>
+      )}
+
+      {/* Título y Cerrar Sesión solo para la vista Perfil */}
+      {initialTab === 'perfil' && (
+        <div className="w-full max-w-4xl mb-6 flex justify-between items-center px-4">
+          <h2 className="text-3xl font-black italic tracking-tighter uppercase">Tu Perfil</h2>
           <button 
-            key={tab.id}
-            onClick={() => setClientTab(tab.id as any)} 
-            className={`flex items-center gap-2 px-6 py-3 rounded-2xl transition-all uppercase text-[10px] tracking-[0.2em] ${clientTab === tab.id ? 'bg-brand-black text-white shadow-xl shadow-brand-black/20' : 'text-brand-black/40 hover:text-brand-black hover:bg-brand-black/5'}`}
+            onClick={onLogout}
+            className="flex items-center gap-2 text-[10px] font-black text-red-500 bg-red-50 hover:bg-red-100 px-4 py-2 rounded-xl border border-red-100 transition-colors uppercase tracking-widest"
           >
-            <tab.icon className="w-4 h-4" /> {tab.label}
+            <LogOut className="w-3 h-3" /> CERRAR SESIÓN
           </button>
-        ))}
-      </nav>
+        </div>
+      )}
 
       {/* Contenido Dinámico */}
       <div className="w-full max-w-4xl">
         <AnimatePresence mode="wait">
+          {clientTab === 'perfil' && (
+            <motion.div 
+              key="perfil" 
+              initial={{ opacity: 0, y: 10 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              exit={{ opacity: 0, y: -10 }}
+              className="space-y-8 text-left"
+            >
+              {/* Profile Tabs */}
+              <div className="flex gap-8 border-b border-brand-black/5 mb-8">
+                <button 
+                  onClick={() => setProfileTab('resumen')}
+                  className={`pb-4 text-xs font-black tracking-widest uppercase transition-all border-b-2 ${profileTab === 'resumen' ? 'border-brand-orange text-brand-black' : 'border-transparent text-brand-black/30'}`}
+                >
+                  Resumen de Actividad
+                </button>
+                <button 
+                  onClick={() => setProfileTab('logros')}
+                  className={`pb-4 text-xs font-black tracking-widest uppercase transition-all border-b-2 ${profileTab === 'logros' ? 'border-brand-orange text-brand-black' : 'border-transparent text-brand-black/30'}`}
+                >
+                  Mis Logros
+                </button>
+              </div>
+
+              {profileTab === 'resumen' ? (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="bg-white border border-brand-black/5 p-8 rounded-[32px] shadow-sm">
+                    <p className="text-[10px] font-black text-brand-orange tracking-widest uppercase mb-4">Total Gastado</p>
+                    <p className="text-4xl font-black italic tracking-tighter">S/ 480.00</p>
+                    <p className="text-[10px] text-brand-black/30 mt-2 font-bold">EN LAS ÚLTIMAS 4 VISITAS</p>
+                  </div>
+                  <div className="bg-white border border-brand-black/5 p-8 rounded-[32px] shadow-sm">
+                    <p className="text-[10px] font-black text-brand-orange tracking-widest uppercase mb-4">Visitas Mensuales</p>
+                    <p className="text-4xl font-black italic tracking-tighter">12</p>
+                    <p className="text-[10px] text-brand-black/30 mt-2 font-bold">PROMEDIO DE 3 POR SEMANA</p>
+                  </div>
+                  <div className="bg-white border border-brand-black/5 p-8 rounded-[32px] shadow-sm">
+                    <p className="text-[10px] font-black text-brand-orange tracking-widest uppercase mb-4">Ahorro Total VIP</p>
+                    <p className="text-4xl font-black italic tracking-tighter text-green-600">S/ 125.50</p>
+                    <p className="text-[10px] text-brand-black/30 mt-2 font-bold">GRACIAS A TU CARTILLA</p>
+                  </div>
+
+                  <div className="md:col-span-3 bg-brand-black text-white p-10 rounded-[40px] flex flex-col md:flex-row items-center justify-between gap-8">
+                    <div>
+                      <h4 className="text-2xl font-black italic uppercase tracking-tight mb-2">Estado de Fidelidad</h4>
+                      <p className="text-white/50 text-sm font-bold uppercase tracking-wide">Estás a solo <span className="text-brand-orange">6 sellos</span> de tu próximo plato de cortesía.</p>
+                    </div>
+                    <div className="flex gap-2">
+                      {Array.from({ length: 10 }).map((_, i) => (
+                        <div key={i} className={`w-3 h-3 rounded-full ${i < stamps ? 'bg-brand-orange shadow-lg shadow-brand-orange/40' : 'bg-white/10'}`} />
+                      ))}
+                    </div>
+                    <button onClick={() => setClientTab('vip')} className="bg-white text-brand-black font-black px-8 py-4 rounded-2xl text-[10px] tracking-widest uppercase italic hover:bg-brand-orange hover:text-white transition-all">
+                      VER DETALLE
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                  {[
+                    { icon: Flame, title: "Fuego Inicial", desc: "Primera visita realizada", earned: true },
+                    { icon: Star, title: "Cliente Fiel", desc: "Has venido 5 veces", earned: true },
+                    { icon: Award, title: "Crítico Junior", desc: "Dejaste tu primera reseña", earned: true },
+                    { icon: Utensils, title: "Chef's Fan", desc: "Probaste 3 platos recomendados", earned: false },
+                  ].map((logro, i) => (
+                    <div key={i} className={`p-8 rounded-[32px] border flex flex-col items-center gap-4 transition-all ${logro.earned ? 'bg-white border-brand-black/5 shadow-sm' : 'bg-brand-black/5 border-transparent opacity-40 grayscale'}`}>
+                      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${logro.earned ? 'bg-brand-orange/10 text-brand-orange' : 'bg-brand-black/10 text-brand-black'}`}>
+                        <logro.icon className="w-7 h-7" />
+                      </div>
+                      <div>
+                        <h5 className="text-xs font-black uppercase tracking-tight mb-1">{logro.title}</h5>
+                        <p className="text-[9px] font-bold text-brand-black/40 uppercase leading-tight">{logro.desc}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </motion.div>
+          )}
+
           {clientTab === 'vip' && (
             <motion.div 
               key="vip" 
@@ -219,44 +343,103 @@ export function ClienteView({ onLogout }: { onLogout: () => void }) {
               initial={{ opacity: 0, y: 10 }} 
               animate={{ opacity: 1, y: 0 }} 
               exit={{ opacity: 0, y: -10 }}
-              className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left"
+              className="space-y-8 text-left"
             >
-              {[
-                { title: "2x1 en Chilcanos Clásicos", desc: "Válido de Lunes a Miércoles de 5pm a 9pm.", code: "CHILCANO2X1", expires: "Vence en 3 días" },
-                { title: "Parrilla Mambo -30%", desc: "Descuento directo en nuestra parrillada personal durante toda la semana.", code: "MAMBO30", expires: "Vence hoy" },
-                { title: "Cerveza Helada x Sello", desc: "Canjea una rubia bien helada por cada 2 sellos registrados.", code: "BREWFREE", expires: "Vence mañana" },
-                { title: "Postre de Cortesía", desc: "Suspiro a la limeña gratis por consumos mayores a S/ 100.", code: "MAMBOSWEET", expires: "Vence en 5 días" }
-              ].map((promo, i) => (
-                <div key={i} className="group relative">
-                  {/* Coupon Design */}
-                  <div className="bg-brand-cream p-8 rounded-[40px] border-2 border-brand-black/5 flex flex-col justify-between min-h-[250px] relative overflow-hidden shadow-sm hover:border-brand-orange/20 transition-all">
-                    {/* Punch holes effect */}
-                    <div className="absolute -left-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-brand-cream-light rounded-full border-r-2 border-brand-black/5" />
-                    <div className="absolute -right-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-brand-cream-light rounded-full border-l-2 border-brand-black/5" />
-                    
-                    <div className="relative z-10">
-                      <div className="flex justify-between items-start mb-6">
-                        <div className="bg-brand-orange/10 text-brand-orange text-[10px] font-black px-3 py-1.5 rounded-lg border border-brand-orange/10 tracking-[0.2em] uppercase italic">
-                          OFERTA VIP
-                        </div>
-                        <span className="text-[10px] text-brand-black/30 font-black uppercase tracking-widest">{promo.expires}</span>
+              {!isVipPassPurchased ? (
+                <div className="bg-brand-black rounded-[48px] p-12 text-center relative overflow-hidden">
+                   <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none text-white">
+                      <Ticket className="w-64 h-64" />
+                   </div>
+                   <div className="relative z-10 max-w-xl mx-auto">
+                      <div className="w-20 h-20 bg-brand-orange rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-xl shadow-brand-orange/40">
+                         <Award className="w-10 h-10 text-white" />
                       </div>
-                      <h4 className="text-2xl font-black mb-3 leading-tight text-brand-black uppercase italic">{promo.title}</h4>
-                      <p className="text-xs text-brand-black/50 font-bold leading-relaxed mb-8 uppercase tracking-wide">{promo.desc}</p>
-                    </div>
+                      <h3 className="text-4xl font-black text-white italic uppercase tracking-tighter mb-4">Cartilla VIP Golden Pass</h3>
+                      <p className="text-brand-orange font-bold uppercase tracking-[0.3em] mb-8 text-sm">Desbloquea ahorros de más de S/ 200 hoy mismo</p>
+                      
+                      <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 mb-10 border border-white/10 text-left">
+                        <ul className="space-y-4">
+                          {[
+                            "Acceso a platos secretos fuera de carta",
+                            "Descuentos de hasta 40% en platos seleccionados",
+                            "2x1 en cocktails clásicos permanentes",
+                            "Pre-venta exclusiva para eventos especiales"
+                          ].map((item, i) => (
+                            <li key={i} className="flex items-center gap-4 text-white/80 text-xs font-bold uppercase tracking-wide">
+                              <CheckCircle2 className="w-5 h-5 text-brand-orange shrink-0" /> {item}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
 
-                    <div className="relative z-10 flex items-center justify-between pt-6 border-t-2 border-dashed border-brand-black/5">
-                      <div className="text-[11px] font-mono font-black text-brand-black/20 tracking-widest uppercase">COD: {promo.code}</div>
-                      <button 
-                        onClick={() => setSelectedCoupon(promo)}
-                        className="bg-brand-black hover:bg-brand-black/90 text-white px-6 py-3 rounded-2xl font-black text-[10px] tracking-widest hover:scale-105 active:scale-95 transition-all shadow-lg shadow-brand-black/20 uppercase italic"
-                      >
-                        RECLAMAR HOY
-                      </button>
+                      <div className="flex flex-col items-center gap-6">
+                        <div className="flex items-baseline gap-3">
+                          <span className="text-white/40 line-through text-lg font-black italic lowercase">S/ 99</span>
+                          <span className="text-white text-5xl font-black italic tracking-tighter uppercase">S/ 49.90</span>
+                        </div>
+                        <button 
+                          onClick={handlePurchaseVip}
+                          disabled={showPurchaseSimulation}
+                          className="w-full bg-brand-orange hover:bg-brand-orange-dark text-white font-black py-6 rounded-[24px] shadow-2xl shadow-brand-orange/30 transition-all active:scale-95 uppercase text-sm tracking-widest italic disabled:opacity-50"
+                        >
+                          {showPurchaseSimulation ? "PROCESANDO PAGO..." : "ADQUIRIR MI GOLDEN PASS"}
+                        </button>
+                        <p className="text-white/30 text-[10px] font-bold uppercase tracking-widest">Pago único mensual • Renovación opcional</p>
+                      </div>
+                   </div>
+                </div>
+              ) : (
+                <>
+                  <div className="flex items-center justify-between mb-8">
+                    <div className="bg-green-100 text-green-600 px-6 py-3 rounded-2xl flex items-center gap-3 border border-green-200">
+                      <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
+                      <span className="text-[10px] font-black uppercase tracking-widest">GOLDEN PASS ACTIVO</span>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-[10px] font-black text-brand-black/30 uppercase tracking-widest mb-1">Ahorro proyectado</p>
+                      <p className="text-2xl font-black text-brand-black italic">S/ 245.00</p>
                     </div>
                   </div>
-                </div>
-              ))}
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {[
+                      { title: "Sashimi de Cortesía", desc: "Plato exclusivo para socios GOLDEN PASS en cada visita.", code: "GOLDVIP1", savings: "S/ 35.00" },
+                      { title: "Brasas Mambo al 40%", desc: "Descuento VIP en todos los cortes de carne de la casa.", code: "GOLDVIP2", savings: "S/ 48.00" },
+                      { title: "Barra Libre Cocktails", desc: "Acceso a la barra libre los sábados de 8pm a 10pm.", code: "GOLDVIP3", savings: "S/ 85.00" },
+                      { title: "Evento: Cena Maridaje", desc: "Entrada gratuita para ti y un acompañante.", code: "GOLDVIP4", savings: "S/ 120.00" }
+                    ].map((promo, i) => (
+                      <div key={i} className="group relative">
+                        <div className="bg-brand-black p-8 rounded-[40px] border border-white/5 flex flex-col justify-between min-h-[250px] relative overflow-hidden shadow-xl">
+                          <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none text-brand-orange">
+                            <Award className="w-32 h-32" />
+                          </div>
+                          
+                          <div className="relative z-10">
+                            <div className="flex justify-between items-start mb-6">
+                              <div className="bg-brand-orange/20 text-brand-orange text-[10px] font-black px-3 py-1.5 rounded-lg border border-brand-orange/20 tracking-[0.2em] uppercase italic">
+                                EXCLUSIVO SOCIO
+                              </div>
+                              <span className="text-[10px] text-brand-orange font-black uppercase tracking-widest">Ahorras {promo.savings}</span>
+                            </div>
+                            <h4 className="text-2xl font-black mb-3 leading-tight text-white uppercase italic">{promo.title}</h4>
+                            <p className="text-xs text-white/50 font-bold leading-relaxed mb-8 uppercase tracking-wide">{promo.desc}</p>
+                          </div>
+
+                          <div className="relative z-10 flex items-center justify-between pt-6 border-t border-white/10">
+                            <div className="text-[11px] font-mono font-black text-white/10 tracking-widest uppercase">ID: {promo.code}</div>
+                            <button 
+                              onClick={() => setSelectedCoupon(promo)}
+                              className="bg-brand-orange hover:bg-white hover:text-brand-black text-white px-6 py-3 rounded-2xl font-black text-[10px] tracking-widest hover:scale-105 active:scale-95 transition-all shadow-lg shadow-brand-orange/20 uppercase italic"
+                            >
+                              USAR BENEFICIO
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
             </motion.div>
           )}
         </AnimatePresence>

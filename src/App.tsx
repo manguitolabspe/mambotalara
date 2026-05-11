@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useState } from 'react';
 import {
-  Home, Utensils, ShoppingCart, User, ChevronRight
+  Home, Utensils, ShoppingCart, User, ChevronRight, Award
 } from 'lucide-react';
 
 import { AdminView } from './components/views/AdminView';
@@ -12,7 +12,7 @@ import { QRModal, ScheduleModal, CartModal, LoginModal, PaymentQRModal, CashModa
 import { CartItem } from './types';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'inicio' | 'carta' | 'admin' | 'cliente'>('inicio');
+  const [activeTab, setActiveTab] = useState<'inicio' | 'carta' | 'admin' | 'cliente' | 'vip'>('inicio');
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -21,6 +21,14 @@ export default function App() {
   const [isPaymentQROpen, setIsPaymentQROpen] = useState(false);
   const [isCashOpen, setIsCashOpen] = useState(false);
   const [isBankTransferOpen, setIsBankTransferOpen] = useState(false);
+
+  const [isVipPassPurchased, setIsVipPassPurchased] = useState(false);
+
+  const handleLoginSuccess = (role: 'admin' | 'cliente') => {
+    setUserRole(role);
+    setActiveTab(role);
+    setIsLoginOpen(false);
+  };
 
   const addToCart = (item: any, quantity: number, comment: string) => {
     setCart(prev => [
@@ -106,7 +114,7 @@ export default function App() {
             </button>
           ) : (
             <button 
-              onClick={() => setActiveTab(userRole === 'admin' ? 'admin' : 'cliente')}
+              onClick={() => setActiveTab('cliente')}
               className="bg-brand-orange/20 text-brand-orange hover:bg-brand-orange/30 font-black px-4 py-2.5 rounded flex items-center text-sm tracking-wider transition-colors"
             >
               <User className="w-4 h-4 mr-2"/> MI PERFIL
@@ -154,7 +162,22 @@ export default function App() {
           )}
           {activeTab === 'cliente' && (
             <motion.div key="cliente" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex flex-col w-full">
-              <ClienteView onLogout={() => { setUserRole('guest'); setActiveTab('inicio'); }} />
+              <ClienteView 
+                initialTab="perfil" 
+                onLogout={() => { setUserRole('guest'); setActiveTab('inicio'); }} 
+                isVipPassPurchased={isVipPassPurchased}
+                setIsVipPassPurchased={setIsVipPassPurchased}
+              />
+            </motion.div>
+          )}
+          {activeTab === 'vip' && (
+            <motion.div key="vip" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex flex-col w-full">
+              <ClienteView 
+                initialTab="vip" 
+                onLogout={() => { setUserRole('guest'); setActiveTab('inicio'); }} 
+                isVipPassPurchased={isVipPassPurchased}
+                setIsVipPassPurchased={setIsVipPassPurchased}
+              />
             </motion.div>
           )}
         </AnimatePresence>
@@ -188,11 +211,7 @@ export default function App() {
         {isLoginOpen && (
           <LoginModal 
             onClose={() => setIsLoginOpen(false)} 
-            onLogin={(role) => {
-              setUserRole(role);
-              setActiveTab(role);
-              setIsLoginOpen(false);
-            }} 
+            onLogin={handleLoginSuccess} 
           />
         )}
         {isPaymentQROpen && <PaymentQRModal onClose={() => setIsPaymentQROpen(false)} />}
@@ -207,38 +226,58 @@ export default function App() {
       {/* --- MOBILE BOTTOM NAV --- */}
       <div className="md:hidden fixed bottom-0 left-0 w-full bg-brand-black z-40 border-t border-white/5">
         <div className="flex h-16 relative">
-          <button 
-            onClick={() => setActiveTab('inicio')}
-            className={`flex-1 flex flex-col items-center justify-center gap-1 transition-colors relative ${activeTab === 'inicio' ? 'text-brand-orange' : 'text-white'}`}
-          >
-            <Home className="w-6 h-6"/>
-            <span className="text-[10px] font-bold tracking-wider">INICIO</span>
-          </button>
-          
-          <button 
-            onClick={() => setActiveTab('carta')}
-            className={`flex-1 flex flex-col items-center justify-center gap-1 transition-colors relative ${activeTab === 'carta' ? 'text-brand-orange' : 'text-white'}`}
-          >
-            <Utensils className="w-6 h-6"/>
-            <span className="text-[10px] font-bold tracking-wider">CARTA</span>
-          </button>
-          
           {userRole === 'guest' ? (
-            <button 
-              onClick={() => setIsLoginOpen(true)}
-              className="flex-1 flex flex-col items-center justify-center gap-1 transition-colors relative text-white"
-            >
-              <User className="w-6 h-6"/>
-              <span className="text-[10px] font-bold tracking-wider">INGRESAR</span>
-            </button>
+            <>
+              <button 
+                onClick={() => setActiveTab('inicio')}
+                className={`flex-1 flex flex-col items-center justify-center gap-1 transition-colors relative ${activeTab === 'inicio' ? 'text-brand-orange' : 'text-white'}`}
+              >
+                <Home className="w-6 h-6"/>
+                <span className="text-[10px] font-bold tracking-wider">INICIO</span>
+              </button>
+              
+              <button 
+                onClick={() => setActiveTab('carta')}
+                className={`flex-1 flex flex-col items-center justify-center gap-1 transition-colors relative ${activeTab === 'carta' ? 'text-brand-orange' : 'text-white'}`}
+              >
+                <Utensils className="w-6 h-6"/>
+                <span className="text-[10px] font-bold tracking-wider">CARTA</span>
+              </button>
+              
+              <button 
+                onClick={() => setIsLoginOpen(true)}
+                className="flex-1 flex flex-col items-center justify-center gap-1 transition-colors relative text-white"
+              >
+                <User className="w-6 h-6"/>
+                <span className="text-[10px] font-bold tracking-wider">INGRESAR</span>
+              </button>
+            </>
           ) : (
-            <button 
-              onClick={() => setActiveTab(userRole === 'admin' ? 'admin' : 'cliente')}
-              className={`flex-1 flex flex-col items-center justify-center gap-1 transition-colors relative ${activeTab === 'admin' || activeTab === 'cliente' ? 'text-brand-orange' : 'text-white'}`}
-            >
-              <User className="w-6 h-6"/>
-              <span className="text-[10px] font-bold tracking-wider uppercase">PERFIL</span>
-            </button>
+            <>
+              <button 
+                onClick={() => setActiveTab('carta')}
+                className={`flex-1 flex flex-col items-center justify-center gap-1 transition-colors relative ${activeTab === 'carta' ? 'text-brand-orange' : 'text-white'}`}
+              >
+                <Utensils className="w-6 h-6"/>
+                <span className="text-[10px] font-bold tracking-wider">CARTA</span>
+              </button>
+
+              <button 
+                onClick={() => setActiveTab('vip')}
+                className={`flex-1 flex flex-col items-center justify-center gap-1 transition-colors relative ${activeTab === 'vip' ? 'text-brand-orange' : 'text-white'}`}
+              >
+                <Award className="w-6 h-6"/>
+                <span className="text-[10px] font-bold tracking-wider">VIP</span>
+              </button>
+              
+              <button 
+                onClick={() => setActiveTab(userRole === 'admin' ? 'admin' : 'cliente')}
+                className={`flex-1 flex flex-col items-center justify-center gap-1 transition-colors relative ${activeTab === 'admin' || activeTab === 'cliente' ? 'text-brand-orange' : 'text-white'}`}
+              >
+                <User className="w-6 h-6"/>
+                <span className="text-[10px] font-bold tracking-wider uppercase">{userRole === 'admin' ? 'ADMIN' : 'PERFIL'}</span>
+              </button>
+            </>
           )}
         </div>
       </div>

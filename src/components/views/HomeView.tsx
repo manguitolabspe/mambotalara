@@ -105,7 +105,7 @@ export function HomeView({ setActiveTab, onOpenSchedule, onOpenPaymentQR, onOpen
         </div>
 
         {/* MOBILE HERO SLIDER */}
-        <div className="md:hidden relative w-full h-[280px] bg-brand-black">
+        <div className="md:hidden relative w-full h-[240px] bg-brand-black">
           <AnimatePresence mode="popLayout">
             <motion.img 
               key={`mobile-img-${slide.id}`}
